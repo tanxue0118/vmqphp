@@ -1,6 +1,6 @@
 <div class="layui-row layui-col-space10 panel_box">
     <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;">
+        <a href="javascript:;" onclick="openOrders({today:'1'})">
             <div class="panel_icon layui-bg-green">
                 <i class="layui-icon layui-icon-form"></i>
             </div>
@@ -11,7 +11,7 @@
         </a>
     </div>
     <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;">
+        <a href="javascript:;" onclick="openOrders({today:'1', state:'1'})">
             <div class="panel_icon layui-bg-black">
                 <i class="layui-icon layui-icon-ok"></i>
             </div>
@@ -22,7 +22,7 @@
         </a>
     </div>
     <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;">
+        <a href="javascript:;" onclick="openOrders({today:'1', state:'-1'})">
             <div class="panel_icon layui-bg-red">
                 <i class="layui-icon layui-icon-close"></i>
             </div>
@@ -33,7 +33,7 @@
         </a>
     </div>
     <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;">
+        <a href="javascript:;" onclick="openOrders({today:'1', state:'1'})">
             <div class="panel_icon layui-bg-orange">
                 <i class="layui-icon layui-icon-rmb"></i>
             </div>
@@ -45,7 +45,7 @@
         </a>
     </div>
     <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;">
+        <a href="javascript:;" onclick="openOrders({state:'1'})">
             <div class="panel_icon layui-bg-cyan">
                 <i class="layui-icon layui-icon-rmb"></i>
             </div>
@@ -56,7 +56,7 @@
         </a>
     </div>
     <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;">
+        <a href="javascript:;" onclick="openOrders({state:'1'})">
             <div class="panel_icon layui-bg-blue">
                 <i class="layui-icon layui-icon-form"></i>
             </div>
@@ -115,7 +115,7 @@
 <style>
     .panel_box{ margin-bottom:5px;}
     .panel{ text-align:center; height:90px;}
-    .panel_box a{display:block; border-radius:5px; overflow:hidden; height:80px; background-color:#f2f2f2 !important; }
+    .panel_box a{display:block; border-radius:5px; overflow:hidden; height:80px; background-color:#f2f2f2 !important; cursor:pointer; }
     .panel_icon{ width:40%; display: inline-block; line-height:80px; float:left; position:relative; height:100%;}
     .panel_icon i{ font-size:40px !important; color:#fff; display: inline-block;}
     .panel_word{ width:60%; display: inline-block; float:right; margin:13px 0 14px; }
@@ -129,6 +129,10 @@
 </style>
 
 <script>
+    function openOrders(filter){
+        window.__orderFilter = filter;
+        $("#LAY_preview").load("admin/orderlist.html");
+    }
     $.post("admin/index/getMain",function (data) {
         $("#todayOrder").html(data.data.todayOrder);
         $("#todaySuccessOrder").html(data.data.todaySuccessOrder);

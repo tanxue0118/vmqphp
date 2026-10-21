@@ -25,6 +25,16 @@
             </select>
         </div>
     </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">时间范围</label>
+        <div class="layui-input-inline">
+            <select id="today" lay-verify="required" lay-filter="today">
+                <option value="">全部</option>
+                <option value="1">只看今日</option>
+
+            </select>
+        </div>
+    </div>
 
 
 </div>
@@ -63,20 +73,34 @@
 
     }
     var myTable,table,form;
+    // 从首页统计卡片跳转过来时带上一次性筛选条件
+    var __orderFilter = window.__orderFilter || {};
+    window.__orderFilter = null;
+    function getWhere(){
+        return {
+            state: $("#state").val(),
+            type: $("#type").val(),
+            today: $("#today").val()
+        };
+    }
+    function reloadTable(){
+        myTable.reload({ where: getWhere() });
+    }
     layui.use(['form','table','laydate'], function(){
         table = layui.table;
         form = layui.form;
+
+        $("#state").val(__orderFilter.state || "");
+        $("#type").val(__orderFilter.type || "");
+        $("#today").val(__orderFilter.today || "");
 
         //第一个实例
         myTable = table.render({
             elem: '#demo'
             ,height: 'full-160'
-            ,url: 'admin/index/getOrders'
+            ,url: '/admin/index/getOrders'
             ,toolbar: '#toolbarDemo'
-            ,where: {
-                state:$("#state").val(),
-                type:$("#type").val()
-            }
+            ,where: getWhere()
             ,cols: [[ //表头
                 {field: 'create_date', title: '创建时间',minWidth:160,templet: function(d){
                         return formatDate(d.create_date);
@@ -133,15 +157,10 @@
                         ,shade: 0.01
                     });
 
-                    $.post("admin/index/setBd","id="+data.id,function (data) {
+                    $.post("/admin/index/setBd","id="+data.id,function (data) {
                         if (data.code==1){
                             layer.msg("操作成功！");
-                            myTable.reload({
-                                where: {
-                                    state:$("#state").val(),
-                                    type:$("#type").val()
-                                }
-                            });
+                            reloadTable();
                         }else if(data.code==-2){
                             layer.confirm('补单失败，异步通知返回错误，是否查看通知返回数据？', {
                                 btn: ['查看','取消'] //按钮
@@ -162,20 +181,17 @@
                 });
             }else if(layEvent === 'del'){
                 layer.confirm('确定要删除订单吗？', function(index){
+                    layer.close(index);
                     layer.msg('操作中', {
                         icon: 16
                         ,shade: 0.01
                     });
 
-                    $.post("admin/index/delOrder","id="+data.id,function (data) {
+                    $.post("/admin/index/delOrder","id="+data.id,function (data) {
                         if (data.code==1){
                             layer.msg("操作成功！");
-                            myTable.reload({
-                                where: {
-                                    state:$("#state").val(),
-                                    type:$("#type").val()
-                                }
-                            });
+                            obj.del();
+                            reloadTable();
                         }else{
                             layer.msg(data.msg);
                         }
@@ -189,23 +205,15 @@
             }
         });
         form.on('select(state)', function(data){
-            myTable.reload({
-                where: {
-                    state:$("#state").val(),
-                    type:$("#type").val()
-                }
-            });
-
+            reloadTable();
         });
 
         form.on('select(type)', function(data){
-            myTable.reload({
-                where: {
-                    state:$("#state").val(),
-                    type:$("#type").val()
-                }
-            });
+            reloadTable();
+        });
 
+        form.on('select(today)', function(data){
+            reloadTable();
         });
 
 
@@ -220,15 +228,10 @@
                             ,shade: 0.01
                         });
 
-                        $.post("admin/index/delGqOrder",function (data) {
+                        $.post("/admin/index/delGqOrder",function (data) {
                             if (data.code==1){
                                 layer.msg("操作成功！");
-                                myTable.reload({
-                                    where: {
-                                        state:$("#state").val(),
-                                        type:$("#type").val()
-                                    }
-                                });
+                                reloadTable();
                             }else{
                                 layer.msg(data.msg);
                             }
@@ -245,15 +248,10 @@
                             ,shade: 0.01
                         });
 
-                        $.post("admin/index/delLastOrder",function (data) {
+                        $.post("/admin/index/delLastOrder",function (data) {
                             if (data.code==1){
                                 layer.msg("操作成功！");
-                                myTable.reload({
-                                    where: {
-                                        state:$("#state").val(),
-                                        type:$("#type").val()
-                                    }
-                                });
+                                reloadTable();
                             }else{
                                 layer.msg(data.msg);
                             }

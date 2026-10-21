@@ -54,6 +54,7 @@ class Index
 
 
         $countOrder = Db::name("pay_order")
+            ->where("state >=1")
             ->count();
         $countMoney = Db::name("pay_order")
             ->where("state >=1")
@@ -230,11 +231,15 @@ class Index
         $size = input("limit");
 
         $obj = Db::table('pay_order')->page($page,$size);
-        if (input("type")){
+        if (input("type") !== null && input("type") !== ""){
             $obj = $obj->where("type",input("type"));
         }
-        if (input("state")){
+        if (input("state") !== null && input("state") !== ""){
             $obj = $obj->where("state",input("state"));
+        }
+        if (input("today") == "1"){
+            $today = strtotime(date("Y-m-d"));
+            $obj = $obj->where("create_date >=".$today)->where("create_date <".($today+86400));
         }
 
 
@@ -252,13 +257,23 @@ class Index
         if (!Session::has("admin")){
             return json($this->getReturn(-1,"没有登录"));
         }
-        $res = Db::name("pay_order")->where("id",input("id"))->find();
-
-        Db::name("pay_order")->where("id",input("id"))->delete();
+        $id = input("id");
+        $id = intval($id);
+        if ($id <= 0){
+            return json($this->getReturn(-1,"参数错误"));
+        }
+        $res = Db::name("pay_order")->where("id",$id)->find();
+        if (!$res){
+            return json($this->getReturn(-1,"订单不存在"));
+        }
         if ($res['state']==0){
             Db::name("tmp_price")
                 ->where("oid",$res['order_id'])
                 ->delete();
+        }
+        $res2 = Db::name("pay_order")->where("id",$id)->delete();
+        if ($res2 === false){
+            return json($this->getReturn(-1,"删除失败"));
         }
 
         return json($this->getReturn());
