@@ -27,12 +27,14 @@ class Index
         $today = strtotime(date("Y-m-d"),time());
 
         $todayOrder = Db::name("pay_order")
+            ->where("io",1)
             ->where("create_date >=".$today)
             ->where("create_date <=".($today+86400))
             ->count();
 
 
         $todaySuccessOrder = Db::name("pay_order")
+            ->where("io",1)
             ->where("state >=1")
             ->where("create_date >=".$today)
             ->where("create_date <=".($today+86400))
@@ -41,12 +43,14 @@ class Index
 
 
         $todayCloseOrder = Db::name("pay_order")
+            ->where("io",1)
             ->where("state",-1)
             ->where("create_date >=".$today)
             ->where("create_date <=".($today+86400))
             ->count();
 
         $todayMoney = Db::name("pay_order")
+            ->where("io",1)
             ->where("state >=1")
             ->where("create_date >=".$today)
             ->where("create_date <=".($today+86400))
@@ -54,9 +58,11 @@ class Index
 
 
         $countOrder = Db::name("pay_order")
+            ->where("io",1)
             ->where("state >=1")
             ->count();
         $countMoney = Db::name("pay_order")
+            ->where("io",1)
             ->where("state >=1")
             ->sum("price");
 
@@ -237,6 +243,9 @@ class Index
         if (input("state") !== null && input("state") !== ""){
             $obj = $obj->where("state",input("state"));
         }
+        if (input("io") !== null && input("io") !== ""){
+            $obj = $obj->where("io",input("io"));
+        }
         if (input("today") == "1"){
             $today = strtotime(date("Y-m-d"));
             $obj = $obj->where("create_date >=".$today)->where("create_date <".($today+86400));
@@ -288,6 +297,9 @@ class Index
         $res = Db::name("pay_order")->where("id",input("id"))->find();
 
         if ($res){
+            if ($res['io'] == 2){
+                return json($this->getReturn(-1, "支出记录不允许补单"));
+            }
 
             $url = $res['notify_url'];
 

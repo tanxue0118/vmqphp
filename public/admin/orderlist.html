@@ -117,6 +117,11 @@
       <option value="1">完成</option>
       <option value="2">通知失败</option>
     </select>
+    <select id="io">
+      <option value="">全部收支</option>
+      <option value="1">收入</option>
+      <option value="2">支出</option>
+    </select>
     <select id="today">
       <option value="">全部时间</option>
       <option value="1">只看今日</option>
@@ -132,6 +137,7 @@
         <th>商户编号</th>
         <th>云端订单编号</th>
         <th>支付方式</th>
+        <th>收支</th>
         <th>金额</th>
         <th>实际金额</th>
         <th>状态</th>
@@ -139,7 +145,7 @@
       </tr>
       </thead>
       <tbody id="orderBody">
-      <tr><td colspan="8" style="text-align:center;color:#86868b;padding:28px;">加载中...</td></tr>
+      <tr><td colspan="9" style="text-align:center;color:#86868b;padding:28px;">加载中...</td></tr>
       </tbody>
     </table>
   </div>
@@ -172,6 +178,10 @@
       + " " + p(now.getHours()) + ":" + p(now.getMinutes()) + ":" + p(now.getSeconds());
   }
   function typeText(t) { return t == "1" ? "微信" : (t == "2" ? "支付宝" : t); }
+  function ioBadge(io) {
+    if (io == "2") return '<span class="vmq-badge fail">支出</span>';
+    return '<span class="vmq-badge ok">收入</span>';
+  }
   function money(n) { return parseFloat(n || 0).toFixed(2); }
   function stateBadge(s) {
     if (s == "2") return '<span class="vmq-badge fail">通知失败</span>';
@@ -212,13 +222,13 @@
   }
 
   function getWhere() {
-    return { state: $("#state").val(), type: $("#type").val(), today: $("#today").val() };
+    return { state: $("#state").val(), type: $("#type").val(), io: $("#io").val(), today: $("#today").val() };
   }
 
   function renderRows(rows) {
     var html = "";
     if (!rows || !rows.length) {
-      html = '<tr><td colspan="8" style="text-align:center;color:#86868b;padding:28px;">暂无订单</td></tr>';
+      html = '<tr><td colspan="9" style="text-align:center;color:#86868b;padding:28px;">暂无订单</td></tr>';
     }
     for (var i = 0; i < rows.length; i++) {
       var d = rows[i];
@@ -227,11 +237,12 @@
         + '<td class="mono">' + esc(d.pay_id) + '</td>'
         + '<td class="mono">' + esc(d.order_id) + '</td>'
         + '<td>' + typeText(d.type) + '</td>'
+        + '<td>' + ioBadge(d.io) + '</td>'
         + '<td class="mono">' + money(d.price) + '</td>'
         + '<td class="mono">' + money(d.really_price) + '</td>'
         + '<td>' + stateBadge(d.state) + '</td>'
         + '<td><div class="vmq-row-actions">'
-        + '<button class="vmq-link" data-act="bd" data-id="' + d.id + '">补单</button>'
+        + (d.io == "2" ? '' : '<button class="vmq-link" data-act="bd" data-id="' + d.id + '">补单</button>')
         + '<button class="vmq-link" data-act="info" data-id="' + d.id + '">详情</button>'
         + '<button class="vmq-link danger" data-act="del" data-id="' + d.id + '">删除</button>'
         + '</div></td>'
@@ -249,17 +260,17 @@
   }
 
   function loadOrders() {
-    $("#orderBody").html('<tr><td colspan="8" style="text-align:center;color:#86868b;padding:28px;">加载中...</td></tr>');
+    $("#orderBody").html('<tr><td colspan="9" style="text-align:center;color:#86868b;padding:28px;">加载中...</td></tr>');
     $.get("/admin/index/getOrders", $.extend({ page: page, limit: limit }, getWhere()), function (res) {
       if (res.code == 0) {
         total = parseInt(res.count) || 0;
         renderRows(res.data);
         renderPager();
       } else {
-        $("#orderBody").html('<tr><td colspan="8" style="text-align:center;color:#d70015;padding:28px;">' + esc(res.msg || "加载失败") + '</td></tr>');
+        $("#orderBody").html('<tr><td colspan="9" style="text-align:center;color:#d70015;padding:28px;">' + esc(res.msg || "加载失败") + '</td></tr>');
       }
     }, "json").fail(function () {
-      $("#orderBody").html('<tr><td colspan="8" style="text-align:center;color:#d70015;padding:28px;">请求失败，请刷新重试</td></tr>');
+      $("#orderBody").html('<tr><td colspan="9" style="text-align:center;color:#d70015;padding:28px;">请求失败，请刷新重试</td></tr>');
     });
   }
 
@@ -276,7 +287,7 @@
     loadOrders();
 
     $("#btnQuery").on("click", function () { page = 1; loadOrders(); });
-    $("#state,#type,#today").on("change", function () { page = 1; loadOrders(); });
+    $("#state,#type,#io,#today").on("change", function () { page = 1; loadOrders(); });
     $("#btnPrev").on("click", function () { if (page > 1) { page--; loadOrders(); } });
     $("#btnNext").on("click", function () { var tp = Math.max(1, Math.ceil(total / limit)); if (page < tp) { page++; loadOrders(); } });
 
@@ -296,6 +307,7 @@
                   + '<div class="kv"><b>关闭时间</b><span>' + fmtDate(d.close_date) + '</span></div>'
                   + '<div class="kv"><b>商户编号</b><span>' + esc(d.pay_id) + '</span></div>'
                   + '<div class="kv"><b>云端编号</b><span>' + esc(d.order_id) + '</span></div>'
+                  + '<div class="kv"><b>收支</b><span>' + (d.io == "2" ? "支出" : "收入") + '</span></div>'
                   + '<div class="kv"><b>自定义参数</b><span>' + esc(d.param) + '</span></div>'
                   + '<div class="kv"><b>通知地址</b><span>' + esc(d.notify_url) + '</span></div>'
                   + '<div class="kv"><b>返回地址</b><span>' + esc(d.return_url) + '</span></div>';
