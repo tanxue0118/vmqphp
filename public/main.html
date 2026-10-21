@@ -1,153 +1,150 @@
-<div class="layui-row layui-col-space10 panel_box">
-    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;" onclick="openOrders({today:'1'})">
-            <div class="panel_icon layui-bg-green">
-                <i class="layui-icon layui-icon-form"></i>
-            </div>
-            <div class="panel_word">
-                <span id="todayOrder">0</span>
-                <cite>今日总订单</cite>
-            </div>
-        </a>
-    </div>
-    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;" onclick="openOrders({today:'1', state:'1'})">
-            <div class="panel_icon layui-bg-black">
-                <i class="layui-icon layui-icon-ok"></i>
-            </div>
-            <div class="panel_word">
-                <span id="todaySuccessOrder">0</span>
-                <cite>今日成功订单</cite>
-            </div>
-        </a>
-    </div>
-    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;" onclick="openOrders({today:'1', state:'-1'})">
-            <div class="panel_icon layui-bg-red">
-                <i class="layui-icon layui-icon-close"></i>
-            </div>
-            <div class="panel_word">
-                <span id="todayCloseOrder">0</span>
-                <cite>今日失败订单</cite>
-            </div>
-        </a>
-    </div>
-    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;" onclick="openOrders({today:'1', state:'1'})">
-            <div class="panel_icon layui-bg-orange">
-                <i class="layui-icon layui-icon-rmb"></i>
-            </div>
-            <div class="panel_word userAll">
-                <span id="todayMoney">0</span>
-                <cite>今日收入</cite>
-
-            </div>
-        </a>
-    </div>
-    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;" onclick="openOrders({state:'1'})">
-            <div class="panel_icon layui-bg-cyan">
-                <i class="layui-icon layui-icon-rmb"></i>
-            </div>
-            <div class="panel_word outIcons">
-                <span id="countMoney">0</span>
-                <cite>总收入</cite>
-            </div>
-        </a>
-    </div>
-    <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-        <a href="javascript:;" onclick="openOrders({state:'1'})">
-            <div class="panel_icon layui-bg-blue">
-                <i class="layui-icon layui-icon-form"></i>
-            </div>
-            <div class="panel_word">
-                <span id="countOrder">0</span>
-                <cite>总成功订单</cite>
-            </div>
-        </a>
-    </div>
-</div>
-
-<table class="layui-table" lay-skin="" >
-    <colgroup>
-        <col width="150">
-        <col>
-    </colgroup>
-    <tbody>
-    <tr>
-        <td><b>操作系统</b></td>
-        <td id="PHP_OS"></td>
-    </tr>
-    <tr>
-        <td><b>服务器引擎</b></td>
-        <td id="SERVER"></td>
-    </tr>
-    <tr>
-        <td><b>PHP版本</b></td>
-        <td id="PHP_VERSION"></td>
-    </tr>
-    <tr>
-        <td><b>MySQL版本</b></td>
-        <td id="MySql"></td>
-    </tr>
-    <tr>
-        <td><b>ThinkPHP版本</b></td>
-        <td id="Thinkphp"></td>
-    </tr>
-
-    <tr>
-        <td><b>GD库版本</b></td>
-        <td id="gd"></td>
-    </tr>
-
-    <tr>
-        <td><b>主程序版本</b></td>
-        <td id="ver"></td>
-    </tr>
-
-    <tr>
-        <td><b>运行时间</b></td>
-        <td id="RunTime"></td>
-    </tr>
-    </tbody>
-</table>
-
 <style>
-    .panel_box{ margin-bottom:5px;}
-    .panel{ text-align:center; height:90px;}
-    .panel_box a{display:block; border-radius:5px; overflow:hidden; height:80px; background-color:#f2f2f2 !important; cursor:pointer; }
-    .panel_icon{ width:40%; display: inline-block; line-height:80px; float:left; position:relative; height:100%;}
-    .panel_icon i{ font-size:40px !important; color:#fff; display: inline-block;}
-    .panel_word{ width:60%; display: inline-block; float:right; margin:13px 0 14px; }
-    .panel_word span{ font-size:25px; display:block; height:34px; }
-    .panel em{ font-style:normal;}
-    .history_box{ min-height:500px; height:500px; overflow-y:scroll; padding:10px !important;}
-    .history_box .layui-timeline .layui-timeline-item:last-child{ padding-bottom:0;}
-    @media screen and (max-width:1200px) {
-        .history_box { height: auto !important; overflow-y: inherit; }
-    }
+  .vmq-home {
+    color: #1d1d1f;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 30px 34px;
+    background: #f5f5f7;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+  .vmq-home * { box-sizing: border-box; }
+
+  .vmq-home-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; }
+  .vmq-home-head h1 { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.6px; }
+  .vmq-home-head .sub { font-size: 14px; color: #6e6e73; }
+
+  .vmq-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .vmq-kpis { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .vmq-kpis { grid-template-columns: 1fr; } }
+
+  .vmq-kpi {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px 20px 16px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    transition: transform .14s, box-shadow .14s;
+    position: relative;
+  }
+  .vmq-kpi:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+  .vmq-kpi:active { transform: translateY(0); }
+
+  .vmq-kpi .row1 { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .vmq-kpi .label { font-size: 13px; color: #6e6e73; font-weight: 500; }
+  .vmq-kpi .go { color: #c7c7cc; font-size: 13px; transition: transform .14s, color .14s; }
+  .vmq-kpi:hover .go { color: #0071e3; transform: translateX(2px); }
+
+  .vmq-kpi .value {
+    font-size: 32px; font-weight: 650; letter-spacing: -0.8px; color: #1d1d1f;
+    font-variant-numeric: tabular-nums; line-height: 1.15;
+  }
+  .vmq-kpi .value small { font-size: 13px; color: #86868b; font-weight: 500; margin-left: 2px; }
+  .vmq-kpi .hint { font-size: 12px; color: #86868b; margin-top: 6px; }
+
+  .vmq-kpi .dot { position: absolute; top: 18px; right: 20px; width: 8px; height: 8px; border-radius: 50%; }
+  .vmq-kpi .dot.blue  { background: #0071e3; }
+  .vmq-kpi .dot.green { background: #34c759; }
+  .vmq-kpi .dot.red   { background: #ff3b30; }
+  .vmq-kpi .dot.orange{ background: #ff9500; }
+  .vmq-kpi .dot.gray  { background: #8e8e93; }
+
+  .vmq-sys { background: #ffffff; border-radius: 16px; padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+  .vmq-sys h2 { margin: 0 0 6px; font-size: 15px; font-weight: 650; color: #1d1d1f; }
+  .vmq-sys .desc { margin: 0 0 18px; font-size: 12px; color: #86868b; }
+  .vmq-sys-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 28px; }
+  @media (max-width: 700px) { .vmq-sys-grid { grid-template-columns: 1fr; } }
+  .vmq-sys-grid .item { display: flex; align-items: baseline; gap: 14px; padding-bottom: 8px; border-bottom: 1px solid #f5f5f7; }
+  .vmq-sys-grid .k { font-size: 13px; color: #6e6e73; flex-shrink: 0; min-width: 84px; }
+  .vmq-sys-grid .v { font-size: 13.5px; color: #1d1d1f; font-family: "SF Mono", ui-monospace, Consolas, monospace; word-break: break-all; }
 </style>
 
-<script>
-    function openOrders(filter){
-        window.__orderFilter = filter;
-        $("#LAY_preview").load("admin/orderlist.html");
-    }
-    $.post("admin/index/getMain",function (data) {
-        $("#todayOrder").html(data.data.todayOrder);
-        $("#todaySuccessOrder").html(data.data.todaySuccessOrder);
-        $("#countOrder").html(data.data.countOrder);
-        $("#todayCloseOrder").html(data.data.todayCloseOrder);
-        $("#countMoney").html(data.data.countMoney);
-        $("#todayMoney").html(data.data.todayMoney);
+<div class="vmq-home">
+  <div class="vmq-home-head">
+    <h1>概览</h1>
+    <span class="sub">点击任意卡片查看对应订单</span>
+  </div>
 
-        $("#PHP_VERSION").html(data.data.PHP_VERSION);
-        $("#PHP_OS").html(data.data.PHP_OS);
-        $("#SERVER").html(data.data.SERVER);
-        $("#MySql").html(data.data.MySql);
-        $("#Thinkphp").html(data.data.Thinkphp);
-        $("#RunTime").html(data.data.RunTime);
-        $("#ver").html(data.data.ver);
-        $("#gd").html(data.data.gd);
-    });
+  <div class="vmq-kpis">
+    <div class="vmq-kpi" onclick="openOrders({today:'1'})">
+      <span class="dot blue"></span>
+      <div class="row1"><span class="label">今日总订单</span><span class="go">›</span></div>
+      <div class="value" id="todayOrder">0</div>
+      <div class="hint">今日全部订单</div>
+    </div>
+    <div class="vmq-kpi" onclick="openOrders({today:'1', state:'1'})">
+      <span class="dot green"></span>
+      <div class="row1"><span class="label">今日成功订单</span><span class="go">›</span></div>
+      <div class="value" id="todaySuccessOrder">0</div>
+      <div class="hint">今日已完成</div>
+    </div>
+    <div class="vmq-kpi" onclick="openOrders({today:'1', state:'-1'})">
+      <span class="dot red"></span>
+      <div class="row1"><span class="label">今日失败订单</span><span class="go">›</span></div>
+      <div class="value" id="todayCloseOrder">0</div>
+      <div class="hint">今日已过期</div>
+    </div>
+    <div class="vmq-kpi" onclick="openOrders({today:'1', state:'1'})">
+      <span class="dot orange"></span>
+      <div class="row1"><span class="label">今日收入</span><span class="go">›</span></div>
+      <div class="value" id="todayMoney">0.00<small>元</small></div>
+      <div class="hint">今日成功订单金额</div>
+    </div>
+    <div class="vmq-kpi" onclick="openOrders({state:'1'})">
+      <span class="dot blue"></span>
+      <div class="row1"><span class="label">总收入</span><span class="go">›</span></div>
+      <div class="value" id="countMoney">0<small>元</small></div>
+      <div class="hint">历史成功订单金额</div>
+    </div>
+    <div class="vmq-kpi" onclick="openOrders({state:'1'})">
+      <span class="dot gray"></span>
+      <div class="row1"><span class="label">总成功订单</span><span class="go">›</span></div>
+      <div class="value" id="countOrder">0</div>
+      <div class="hint">历史全部成功订单</div>
+    </div>
+  </div>
+
+  <div class="vmq-sys">
+    <h2>运行环境</h2>
+    <p class="desc">服务器与程序运行状态</p>
+    <div class="vmq-sys-grid">
+      <div class="item"><span class="k">操作系统</span><span class="v" id="PHP_OS">-</span></div>
+      <div class="item"><span class="k">服务器引擎</span><span class="v" id="SERVER">-</span></div>
+      <div class="item"><span class="k">PHP 版本</span><span class="v" id="PHP_VERSION">-</span></div>
+      <div class="item"><span class="k">MySQL 版本</span><span class="v" id="MySql">-</span></div>
+      <div class="item"><span class="k">ThinkPHP</span><span class="v" id="Thinkphp">-</span></div>
+      <div class="item"><span class="k">GD 库</span><span class="v" id="gd">-</span></div>
+      <div class="item"><span class="k">主程序版本</span><span class="v" id="ver">-</span></div>
+      <div class="item"><span class="k">运行时间</span><span class="v" id="RunTime">-</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openOrders(filter) {
+    window.__orderFilter = filter;
+    window.__loadPage("admin/orderlist.html");
+  }
+
+  $.post("admin/index/getMain", function (data) {
+    if (!data || data.code != 1) {
+      return;
+    }
+    $("#todayOrder").text(data.data.todayOrder);
+    $("#todaySuccessOrder").text(data.data.todaySuccessOrder);
+    $("#todayCloseOrder").text(data.data.todayCloseOrder);
+    $("#todayMoney").html(parseFloat(data.data.todayMoney || 0).toFixed(2) + "<small>元</small>");
+    $("#countMoney").html(parseFloat(data.data.countMoney || 0).toFixed(2) + "<small>元</small>");
+    $("#countOrder").text(data.data.countOrder);
+
+    $("#PHP_VERSION").text(data.data.PHP_VERSION);
+    $("#PHP_OS").text(data.data.PHP_OS);
+    $("#SERVER").text(data.data.SERVER);
+    $("#MySql").text(data.data.MySql);
+    $("#Thinkphp").text(data.data.Thinkphp);
+    $("#RunTime").text(data.data.RunTime);
+    $("#ver").text(data.data.ver);
+    $("#gd").text(data.data.gd);
+  });
 </script>

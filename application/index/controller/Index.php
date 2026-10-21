@@ -69,6 +69,11 @@ class Index
 
         $menu = array(
             array(
+                "name" => "首页",
+                "type" => "url",
+                "url" => "main.html?t=" . time(),
+            ),
+            array(
                 "name" => "系统设置",
                 "type" => "url",
                 "url" => "admin/setting.html?t=" . time(),

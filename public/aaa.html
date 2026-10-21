@@ -12,12 +12,56 @@
 
     <link rel="stylesheet" href="layui/css/layui.css"  media="all">
     <link rel="stylesheet" href="css/global.css?t=1531663423583-6" media="all">
-    <style type="text/css">ins.adsbygoogle{display:none!important;display:none}</style></head>
+    <style type="text/css">
+        ins.adsbygoogle{display:none!important;display:none}
+        /* Apple 浅色主题 */
+        html,body{background:#f5f5f7;}
+        body{color:#1d1d1f;}
+        .layui-layout-admin .layui-header{background:rgba(255,255,255,.78) !important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e8e8ed;}
+        .layui-side,.layui-side.layui-bg-black{background:#ffffff !important;border-right:1px solid #e8e8ed;}
+        .layui-side-scroll{background:#ffffff !important;}
+        .layui-side .layui-nav-tree{background:#ffffff;}
+        .layui-body{background:#f5f5f7;}
+        .layui-body .layui-tab-content{padding:0;}
+        .layui-nav-tree .layui-nav-item a{color:#1d1d1f;font-weight:500;}
+        .layui-nav-tree .layui-nav-item a:hover{background:#f5f5f7;color:#1d1d1f;}
+        .layui-nav-tree .layui-this>a{background:#f0f7ff;color:#0071e3;}
+        .layui-nav-tree .layui-nav-bar{background:#0071e3;}
+        .layui-nav-tree .layui-nav-child dd.layui-this,.layui-nav-tree .layui-nav-child dd.layui-this a{background:#f0f7ff;color:#0071e3;}
+        .layui-nav-tree .layui-nav-item a{color:#1d1d1f !important;}
+        .layui-nav-tree .layui-nav-item a:hover{color:#1d1d1f !important;background:#f5f5f7;}
+        .layui-nav-tree .layui-this>a{color:#0071e3 !important;background:#f0f7ff;}
+        .layui-nav-tree .layui-nav-child dd a,
+        .layui-nav-tree .layui-nav-child a{color:#6e6e73 !important;}
+        .layui-nav-tree .layui-nav-child dd a:hover,
+        .layui-nav-tree .layui-nav-child a:hover{color:#1d1d1f !important;background:#f5f5f7;}
+        .layui-nav-tree .layui-nav-child dd.layui-this a{color:#0071e3 !important;background:#f0f7ff;}
+        .layui-nav .layui-nav-child{background:#ffffff;border:1px solid #e8e8ed;box-shadow:0 6px 24px rgba(0,0,0,.08);border-radius:10px;}
+        .layui-nav .layui-nav-child dd a{color:#1d1d1f;}
+        .layui-nav .layui-nav-child dd a:hover{background:#f5f5f7;color:#1d1d1f;}
+        .layui-nav .layui-nav-item>.layui-nav-child{background:#ffffff;}
+        .layui-nav-tree .layui-nav-itemed>.layui-nav-child{background:#ffffff;}
+        .layui-nav .layui-nav-item a{color:#1d1d1f;}
+        /* layui 按钮统一 Apple 化 */
+        .layui-btn{background:#0071e3 !important;color:#fff !important;border-radius:980px !important;border:none !important;}
+        .layui-btn:hover{background:#0064c4 !important;color:#fff !important;}
+        .layui-btn-primary{background:#e8e8ed !important;color:#1d1d1f !important;}
+        .layui-btn-primary:hover{background:#dcdce0 !important;color:#1d1d1f !important;}
+        .layui-btn-normal{background:#0071e3 !important;color:#fff !important;}
+        .layui-btn-warm{background:#b25000 !important;color:#fff !important;}
+        .layui-btn-danger{background:#d70015 !important;color:#fff !important;}
+        .layui-btn-danger:hover{background:#b80012 !important;color:#fff !important;}
+        .layui-btn-disabled,.layui-btn[disabled]{background:#e8e8ed !important;color:#86868b !important;}
+        ::-webkit-scrollbar{width:10px;height:10px;}
+        ::-webkit-scrollbar-thumb{background:#d2d2d7;border-radius:6px;}
+        ::-webkit-scrollbar-thumb:hover{background:#c7c7cc;}
+        ::-webkit-scrollbar-track{background:transparent;}
+    </style></head>
 <body>
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header header header-demo" summer>
         <div class="layui-main">
-            <span style="color: white;font-size: 30px;font-weight:100;line-height: 58px;font-family:Microsoft JhengHei">后台管理</span>
+            <span style="color: #1d1d1f;font-size: 24px;font-weight:600;line-height: 58px;font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;letter-spacing:-0.3px;">后台管理</span>
 
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
@@ -38,7 +82,7 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <div class="layui-side layui-bg-black">
+        <div class="layui-side">
         <div class="layui-side-scroll">
 
             <ul class="layui-nav layui-nav-tree site-demo-nav" id="v_menu">
@@ -74,7 +118,7 @@
         <i class="layui-icon">&#xe602;</i>
     </div>
     <div class="site-mobile-shade"></div>
-    <script src="layui/layui.js?t=1531663423583" charset="utf-8"></script>
+    <script src="layui/layui.all.js?t=1531663423583" charset="utf-8"></script>
     <script>
         window.global = {
             pageType: 'demo'
@@ -106,7 +150,7 @@
 
     });
 </script>
-<script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/jquery.min.js"></script>
 <script src="js/llqrcode.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     function getObjectURL(file) {
@@ -121,7 +165,30 @@
         return url;
     }
 
-$("#LAY_preview").load("main.html")
+    // 页面缓存加载：首次拉取后缓存，再次点击秒开
+    window.__pageCache = {};
+    window.__loadPage = function (url, key) {
+        key = key || url;
+        var preview = $("#LAY_preview");
+        preview.html('<div style="padding:60px;text-align:center;color:#86868b;font-size:14px;">加载中...</div>');
+        if (window.__pageCache[key]) {
+            preview.html(window.__pageCache[key]);
+            return;
+        }
+        $.ajax({
+            url: url,
+            cache: false,
+            success: function (html) {
+                window.__pageCache[key] = html;
+                preview.html(html);
+            },
+            error: function () {
+                preview.html('<div style="padding:60px;text-align:center;color:#d70015;font-size:14px;">加载失败，请重试</div>');
+            }
+        });
+    };
+
+    __loadPage("main.html")
 
 $.post("getMenu",function (data) {
     if (data == null || data == "" || data.code==-1) {
@@ -147,17 +214,17 @@ $.post("getMenu",function (data) {
     var out_menu = "";
     for (var i = 0;i<data.length;i++){
         if (data[i].type=="menu"){
-            out_menu+='<li class="layui-nav-item layui-nav-itemed">';
+            out_menu+='<li class="layui-nav-item">';
             out_menu+='<a class="" href="javascript:;">'+data[i].name+'</a>';
             out_menu+='<dl class="layui-nav-child">';
 
             for (var ii = 0;ii<data[i].node.length;ii++){
-                out_menu+='<dd><a onclick="$(\'#LAY_preview\').load(\''+data[i].node[ii].url+'\');">'+data[i].node[ii].name+'</a></dd>';
+                out_menu+='<dd><a onclick="__loadPage(\''+data[i].node[ii].url+'\')">'+data[i].node[ii].name+'</a></dd>';
             }
             out_menu+='</dl>';
             out_menu+='</li>';
         } else{
-            out_menu+='<li class="layui-nav-item"><a onclick="$(\'#LAY_preview\').load(\''+data[i].url+'\');">'+data[i].name+'</a></li>';
+            out_menu+='<li class="layui-nav-item"><a onclick="__loadPage(\''+data[i].url+'\')">'+data[i].name+'</a></li>';
         }
     }
     console.log(out_menu);

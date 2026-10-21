@@ -1,272 +1,361 @@
-<div class="layui-form layui-form-pane" action="">
-<div class="layui-form-item">
+<style>
+  /* ─── Apple 浅色订单页 ─── */
+  .vmq-page {
+    color: #1d1d1f;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 28px 32px;
+    background: #f5f5f7;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+  .vmq-page * { box-sizing: border-box; }
 
-    <div class="layui-inline">
-        <label class="layui-form-label">支付方式</label>
-        <div class="layui-input-inline">
-            <select id="type" lay-verify="required" lay-filter="type">
-                <option value="">不限制</option>
-                <option value="1">微信</option>
-                <option value="2">支付宝</option>
+  .vmq-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 22px; gap: 16px; flex-wrap: wrap; }
+  .vmq-head h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px; color: #1d1d1f; }
+  .vmq-head .sub { margin: 4px 0 0; font-size: 14px; color: #6e6e73; }
+  .vmq-head .sub b { color: #1d1d1f; font-weight: 600; }
 
-            </select>
-        </div>
+  .vmq-filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+  .vmq-filters select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: #ffffff;
+    color: #1d1d1f;
+    border: 1px solid #e8e8ed;
+    border-radius: 10px;
+    padding: 8px 32px 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2386868b' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+  .vmq-filters select:hover { border-color: #d2d2d7; }
+  .vmq-filters select:focus { outline: none; border-color: #0071e3; box-shadow: 0 0 0 3px rgba(0,113,227,.15); }
+
+  .vmq-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #e8e8ed; color: #1d1d1f;
+    border: none; border-radius: 980px;
+    padding: 8px 16px; font-size: 14px; font-weight: 500;
+    cursor: pointer; white-space: nowrap;
+    transition: background .12s, opacity .12s;
+  }
+  .vmq-btn:hover { background: #dcdce0; }
+  .vmq-btn.pri { background: #0071e3; color: #fff; }
+  .vmq-btn.pri:hover { background: #0064c4; }
+  .vmq-btn.danger { background: #ffffff; color: #d70015; }
+  .vmq-btn.danger:hover { background: #fff2f3; }
+  .vmq-btn:disabled { opacity: .4; cursor: default; }
+
+  .vmq-card { background: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+  .vmq-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .vmq-table th {
+    text-align: left; padding: 11px 16px;
+    font-size: 12px; font-weight: 500;
+    color: #6e6e73;
+    border-bottom: 1px solid #e8e8ed;
+    white-space: nowrap;
+  }
+  .vmq-table td { padding: 13px 16px; border-bottom: 1px solid #f0f0f2; color: #1d1d1f; vertical-align: middle; }
+  .vmq-table tbody tr:last-child td { border-bottom: none; }
+  .vmq-table tbody tr:hover td { background: #fafafa; }
+  .vmq-table .mono { font-family: "SF Mono", ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 13px; color: #1d1d1f; }
+  .vmq-table .dim { color: #86868b; }
+
+  .vmq-badge { display: inline-block; padding: 2px 10px; border-radius: 980px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .vmq-badge.ok     { color: #248a3d; background: rgba(36,138,61,.10); }
+  .vmq-badge.wait   { color: #b25000; background: rgba(178,80,0,.10); }
+  .vmq-badge.err    { color: #d70015; background: rgba(215,0,21,.08); }
+  .vmq-badge.fail   { color: #b25000; background: rgba(178,80,0,.10); }
+
+  .vmq-row-actions { display: inline-flex; gap: 8px; white-space: nowrap; }
+  .vmq-link { background: none; border: none; color: #0071e3; font-size: 13px; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
+  .vmq-link:hover { background: rgba(0,113,227,.08); }
+  .vmq-link.danger { color: #d70015; }
+  .vmq-link.danger:hover { background: rgba(215,0,21,.07); }
+
+  .vmq-pager { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+  .vmq-pager .info { font-size: 13px; color: #6e6e73; }
+
+  /* modal */
+  .vmq-overlay { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,.32); backdrop-filter: blur(6px); }
+  .vmq-modal { width: 100%; max-width: 520px; background: #ffffff; border-radius: 16px; box-shadow: 0 24px 64px rgba(0,0,0,.25); overflow: hidden; }
+  .vmq-modal .m-head { padding: 18px 20px 14px; font-size: 17px; font-weight: 600; color: #1d1d1f; text-align: center; }
+  .vmq-modal .m-body { padding: 4px 20px 18px; font-size: 14px; color: #1d1d1f; max-height: 60vh; overflow: auto; text-align: center; }
+  .vmq-modal .m-body .kv { display: flex; gap: 12px; padding: 6px 0; text-align: left; }
+  .vmq-modal .m-body .kv b { color: #6e6e73; font-weight: 500; width: 96px; flex-shrink: 0; }
+  .vmq-modal .m-body .kv span { color: #1d1d1f; word-break: break-all; }
+  .vmq-modal .m-foot { padding: 0 20px 20px; display: flex; justify-content: center; gap: 10px; }
+  .vmq-hidden { display: none !important; }
+</style>
+
+<div class="vmq-page">
+  <div class="vmq-head">
+    <div>
+      <h1>订单</h1>
+      <p class="sub">当前共 <b id="headTotal">0</b> 条订单</p>
     </div>
-    <div class="layui-inline">
-        <label class="layui-form-label">订单状态</label>
-        <div class="layui-input-inline">
-            <select id="state" lay-verify="required" lay-filter="state">
-                <option value="">不限制</option>
-                <option value="-1">过期</option>
-                <option value="0">待支付</option>
-                <option value="1">完成</option>
-                <option value="2">通知失败</option>
-
-            </select>
-        </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="vmq-btn danger" id="btnDelGq">删除所有过期订单</button>
+      <button class="vmq-btn danger" id="btnDelLast">删除七天前订单</button>
     </div>
-    <div class="layui-inline">
-        <label class="layui-form-label">时间范围</label>
-        <div class="layui-input-inline">
-            <select id="today" lay-verify="required" lay-filter="today">
-                <option value="">全部</option>
-                <option value="1">只看今日</option>
+  </div>
 
-            </select>
-        </div>
-    </div>
+  <div class="vmq-filters">
+    <select id="type">
+      <option value="">全部支付方式</option>
+      <option value="1">微信</option>
+      <option value="2">支付宝</option>
+    </select>
+    <select id="state">
+      <option value="">全部状态</option>
+      <option value="-1">过期</option>
+      <option value="0">待支付</option>
+      <option value="1">完成</option>
+      <option value="2">通知失败</option>
+    </select>
+    <select id="today">
+      <option value="">全部时间</option>
+      <option value="1">只看今日</option>
+    </select>
+    <button class="vmq-btn pri" id="btnQuery">查询</button>
+  </div>
 
+  <div class="vmq-card">
+    <table class="vmq-table">
+      <thead>
+      <tr>
+        <th>创建时间</th>
+        <th>商户编号</th>
+        <th>云端订单编号</th>
+        <th>支付方式</th>
+        <th>金额</th>
+        <th>实际金额</th>
+        <th>状态</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody id="orderBody">
+      <tr><td colspan="8" style="text-align:center;color:#86868b;padding:28px;">加载中...</td></tr>
+      </tbody>
+    </table>
+  </div>
 
+  <div class="vmq-pager">
+    <button class="vmq-btn" id="btnPrev">上一页</button>
+    <button class="vmq-btn" id="btnNext">下一页</button>
+    <span class="info" id="pageInfo"></span>
+  </div>
 </div>
+
+<div class="vmq-overlay vmq-hidden" id="vmqOverlay">
+  <div class="vmq-modal">
+    <div class="m-head" id="vmqModalTitle">提示</div>
+    <div class="m-body" id="vmqModalBody"></div>
+    <div class="m-foot" id="vmqModalFoot"></div>
+  </div>
 </div>
-
-<script type="text/html" id="toolbarDemo">
-    <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delGq">删除所有过期订单</button>
-        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delLast">删除七天前订单</button>
-
-    </div>
-</script>
-<table id="demo" lay-filter="test"></table>
-
-<script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="bd">补单</a>
-    <a class="layui-btn layui-btn-xs" lay-event="info">详情</a>
-    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
-
-</script>
-
 
 <script>
-    function formatDate(now) {
-        if (now=="0"){
-            return "无";
-        }
+  var page = 1;
+  var limit = 10;
+  var total = 0;
 
-        now = new Date(now*1000);
-        return now.getFullYear()
-            + "-" + (now.getMonth()>8?(now.getMonth()+1):"0"+(now.getMonth()+1))
-            + "-" + (now.getDate()>9?now.getDate():"0"+now.getDate())
-            + " " + (now.getHours()>9?now.getHours():"0"+now.getHours())
-            + ":" + (now.getMinutes()>9?now.getMinutes():"0"+now.getMinutes())
-            + ":" + (now.getSeconds()>9?now.getSeconds():"0"+now.getSeconds());
+  function fmtDate(now) {
+    if (!now || now == "0") return "无";
+    now = new Date(now * 1000);
+    var p = function (n) { return n > 9 ? n : "0" + n; };
+    return now.getFullYear() + "-" + p(now.getMonth() + 1) + "-" + p(now.getDate())
+      + " " + p(now.getHours()) + ":" + p(now.getMinutes()) + ":" + p(now.getSeconds());
+  }
+  function typeText(t) { return t == "1" ? "微信" : (t == "2" ? "支付宝" : t); }
+  function money(n) { return parseFloat(n || 0).toFixed(2); }
+  function stateBadge(s) {
+    if (s == "2") return '<span class="vmq-badge fail">通知失败</span>';
+    if (s == "1") return '<span class="vmq-badge ok">完成</span>';
+    if (s == "0") return '<span class="vmq-badge wait">待支付</span>';
+    if (s == "-1") return '<span class="vmq-badge err">过期</span>';
+    return s;
+  }
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
 
+  function modal(show, title, bodyHtml, buttons) {
+    $("#vmqModalTitle").text(title);
+    $("#vmqModalBody").html(bodyHtml);
+    var foot = $("#vmqModalFoot").empty();
+    (buttons || [{ text: "关闭", cls: "vmq-btn", onClick: function () { modal(false); } }]).forEach(function (b) {
+      $("<button>").addClass(b.cls || "vmq-btn").text(b.text).on("click", function () {
+        if (b.onClick) b.onClick();
+      }).appendTo(foot);
+    });
+    if (show) {
+      $("#vmqOverlay").removeClass("vmq-hidden");
+    } else {
+      $("#vmqOverlay").addClass("vmq-hidden");
     }
-    var myTable,table,form;
-    // 从首页统计卡片跳转过来时带上一次性筛选条件
-    var __orderFilter = window.__orderFilter || {};
+  }
+  function confirmModal(title, text, yesText, onYes) {
+    modal(true, title, '<p style="margin:0;">' + text + '</p>', [
+      { text: "取消", cls: "vmq-btn", onClick: function () { modal(false); } },
+      { text: yesText || "确定", cls: "vmq-btn pri", onClick: function () { modal(false); onYes(); } }
+    ]);
+  }
+  function alertModal(title, html) {
+    modal(true, title, html, [{ text: "知道了", cls: "vmq-btn pri", onClick: function () { modal(false); } }]);
+  }
+
+  function getWhere() {
+    return { state: $("#state").val(), type: $("#type").val(), today: $("#today").val() };
+  }
+
+  function renderRows(rows) {
+    var html = "";
+    if (!rows || !rows.length) {
+      html = '<tr><td colspan="8" style="text-align:center;color:#86868b;padding:28px;">暂无订单</td></tr>';
+    }
+    for (var i = 0; i < rows.length; i++) {
+      var d = rows[i];
+      html += '<tr>'
+        + '<td class="dim">' + fmtDate(d.create_date) + '</td>'
+        + '<td class="mono">' + esc(d.pay_id) + '</td>'
+        + '<td class="mono">' + esc(d.order_id) + '</td>'
+        + '<td>' + typeText(d.type) + '</td>'
+        + '<td class="mono">' + money(d.price) + '</td>'
+        + '<td class="mono">' + money(d.really_price) + '</td>'
+        + '<td>' + stateBadge(d.state) + '</td>'
+        + '<td><div class="vmq-row-actions">'
+        + '<button class="vmq-link" data-act="bd" data-id="' + d.id + '">补单</button>'
+        + '<button class="vmq-link" data-act="info" data-id="' + d.id + '">详情</button>'
+        + '<button class="vmq-link danger" data-act="del" data-id="' + d.id + '">删除</button>'
+        + '</div></td>'
+        + '</tr>';
+    }
+    $("#orderBody").html(html);
+  }
+
+  function renderPager() {
+    var totalPage = Math.max(1, Math.ceil(total / limit));
+    $("#pageInfo").text("共 " + total + " 条 · 第 " + page + " / " + totalPage + " 页");
+    $("#headTotal").text(total);
+    $("#btnPrev").attr("disabled", page <= 1);
+    $("#btnNext").attr("disabled", page >= totalPage);
+  }
+
+  function loadOrders() {
+    $("#orderBody").html('<tr><td colspan="8" style="text-align:center;color:#86868b;padding:28px;">加载中...</td></tr>');
+    $.get("/admin/index/getOrders", $.extend({ page: page, limit: limit }, getWhere()), function (res) {
+      if (res.code == 0) {
+        total = parseInt(res.count) || 0;
+        renderRows(res.data);
+        renderPager();
+      } else {
+        $("#orderBody").html('<tr><td colspan="8" style="text-align:center;color:#d70015;padding:28px;">' + esc(res.msg || "加载失败") + '</td></tr>');
+      }
+    }, "json").fail(function () {
+      $("#orderBody").html('<tr><td colspan="8" style="text-align:center;color:#d70015;padding:28px;">请求失败，请刷新重试</td></tr>');
+    });
+  }
+
+  // 首页统计卡片跳转过来的一次性筛选
+  (function () {
+    var f = window.__orderFilter || {};
     window.__orderFilter = null;
-    function getWhere(){
-        return {
-            state: $("#state").val(),
-            type: $("#type").val(),
-            today: $("#today").val()
-        };
-    }
-    function reloadTable(){
-        myTable.reload({ where: getWhere() });
-    }
-    layui.use(['form','table','laydate'], function(){
-        table = layui.table;
-        form = layui.form;
+    $("#state").val(f.state || "");
+    $("#type").val(f.type || "");
+    $("#today").val(f.today || "");
+  })();
 
-        $("#state").val(__orderFilter.state || "");
-        $("#type").val(__orderFilter.type || "");
-        $("#today").val(__orderFilter.today || "");
+  $(function () {
+    loadOrders();
 
-        //第一个实例
-        myTable = table.render({
-            elem: '#demo'
-            ,height: 'full-160'
-            ,url: '/admin/index/getOrders'
-            ,toolbar: '#toolbarDemo'
-            ,where: getWhere()
-            ,cols: [[ //表头
-                {field: 'create_date', title: '创建时间',minWidth:160,templet: function(d){
-                        return formatDate(d.create_date);
-                    }
-                },
-                {field: 'pay_id', title: '商户编号',minWidth:180},
-                {field: 'order_id', title: '云端订单编号',minWidth:180},
-                {field: 'type', title: '支付方式',minWidth:100,templet: function(d){
-                        if (d.type=="1"){
-                            return '微信';
-                        }else if (d.type=="2"){
-                            return '支付宝';
-                        }
-                    }
-                },
-                {field: 'price', title: '订单金额',minWidth:100, align:'center'},
-                {field: 'really_price', title: '实际金额',minWidth:100, align:'center'},
+    $("#btnQuery").on("click", function () { page = 1; loadOrders(); });
+    $("#state,#type,#today").on("change", function () { page = 1; loadOrders(); });
+    $("#btnPrev").on("click", function () { if (page > 1) { page--; loadOrders(); } });
+    $("#btnNext").on("click", function () { var tp = Math.max(1, Math.ceil(total / limit)); if (page < tp) { page++; loadOrders(); } });
 
+    $("#orderBody").on("click", ".vmq-link", function () {
+      var id = $(this).attr("data-id");
+      var act = $(this).attr("data-act");
 
-                {field: 'state', title: '状态',minWidth:80,templet: function(d){
-                        if (d.state=="2"){
-                            return '<span style="color: orange">通知失败</span>';
-                        }else if (d.state=="1"){
-                            return '<span style="color: green">完成</span>';
-                        }else if (d.state=="0"){
-                            return '<span style="color: orange">待支付</span>';
-                        }else if (d.state=="-1"){
-                            return '<span style="color: red">过期</span>';
-                        }
-                    }
-                },
-
-                {title: '操作', minWidth: 120, align:'center', toolbar: '#barDemo'}
-
-            ]]
-            ,page:true
-        });
-
-        //监听行工具事件
-        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
-            var data = obj.data //获得当前行数据
-                ,layEvent = obj.event; //获得 lay-event 对应的值
-            if(layEvent === 'info'){
-                var out = "<p>创建时间："+formatDate(data.create_date)+"</p>";
-                out += "<p>支付时间："+formatDate(data.pay_date)+"</p>";
-                out += "<p>关闭时间："+formatDate(data.close_date)+"</p>";
-                out += "<p>自定义参数："+data.param+"</p>";
-                layer.alert(out);
-
-            }else if(layEvent === 'bd'){
-                layer.confirm('确定要补单吗？该操作将会将该订单标记为已支付，并向您的服务器发送订单完成通知', function(index){
-                    layer.msg('操作中', {
-                        icon: 16
-                        ,shade: 0.01
-                    });
-
-                    $.post("/admin/index/setBd","id="+data.id,function (data) {
-                        if (data.code==1){
-                            layer.msg("操作成功！");
-                            reloadTable();
-                        }else if(data.code==-2){
-                            layer.confirm('补单失败，异步通知返回错误，是否查看通知返回数据？', {
-                                btn: ['查看','取消'] //按钮
-                            }, function(){
-                                alert(data.data);
-                            }, function(){
-
-                            });
-                        }else{
-                            layer.msg(data.msg);
-                        }
-
-
-
-                    });
-
-                    console.log(data.id);
-                });
-            }else if(layEvent === 'del'){
-                layer.confirm('确定要删除订单吗？', function(index){
-                    layer.close(index);
-                    layer.msg('操作中', {
-                        icon: 16
-                        ,shade: 0.01
-                    });
-
-                    $.post("/admin/index/delOrder","id="+data.id,function (data) {
-                        if (data.code==1){
-                            layer.msg("操作成功！");
-                            obj.del();
-                            reloadTable();
-                        }else{
-                            layer.msg(data.msg);
-                        }
-
-
-
-                    });
-
-                    console.log(data.id);
-                });
+      if (act === "info") {
+        $.get("/admin/index/getOrders", { page: 1, limit: 1000, state: "", type: "" }, function (res) {
+          if (res.code == 0) {
+            for (var i = 0; i < res.data.length; i++) {
+              var d = res.data[i];
+              if (String(d.id) === String(id)) {
+                var body =
+                  '<div class="kv"><b>创建时间</b><span>' + fmtDate(d.create_date) + '</span></div>'
+                  + '<div class="kv"><b>支付时间</b><span>' + fmtDate(d.pay_date) + '</span></div>'
+                  + '<div class="kv"><b>关闭时间</b><span>' + fmtDate(d.close_date) + '</span></div>'
+                  + '<div class="kv"><b>商户编号</b><span>' + esc(d.pay_id) + '</span></div>'
+                  + '<div class="kv"><b>云端编号</b><span>' + esc(d.order_id) + '</span></div>'
+                  + '<div class="kv"><b>自定义参数</b><span>' + esc(d.param) + '</span></div>'
+                  + '<div class="kv"><b>通知地址</b><span>' + esc(d.notify_url) + '</span></div>'
+                  + '<div class="kv"><b>返回地址</b><span>' + esc(d.return_url) + '</span></div>';
+                modal(true, "订单详情", body, [{ text: "关闭", cls: "vmq-btn", onClick: function () { modal(false); } }]);
+                return;
+              }
             }
+            alertModal("订单详情", '<p style="margin:0;">未找到该订单</p>');
+          }
         });
-        form.on('select(state)', function(data){
-            reloadTable();
+        return;
+      }
+
+      if (act === "bd") {
+        confirmModal("补单确认", "将该订单标记为已支付，并向你的服务器发送完成通知？", "补单", function () {
+          $.post("/admin/index/setBd", "id=" + id, function (data) {
+            if (data.code == 1) {
+              alertModal("补单成功", '<p style="margin:0;">订单已标记为已支付</p>');
+              loadOrders();
+            } else if (data.code == -2) {
+              alertModal("补单失败", '<p style="margin:0;">异步通知返回：</p><p style="word-break:break-all;">' + esc(data.data) + '</p>');
+            } else {
+              alertModal("补单失败", '<p style="margin:0;">' + esc(data.msg) + '</p>');
+            }
+          }, "json");
         });
+        return;
+      }
 
-        form.on('select(type)', function(data){
-            reloadTable();
+      if (act === "del") {
+        confirmModal("删除订单", "确定要删除该订单吗？此操作不可恢复。", "删除", function () {
+          $.post("/admin/index/delOrder", "id=" + id, function (data) {
+            if (data.code == 1) {
+              alertModal("删除成功", '<p style="margin:0;">订单已删除</p>');
+              loadOrders();
+            } else {
+              alertModal("删除失败", '<p style="margin:0;">' + esc(data.msg || "未知错误") + '</p>');
+            }
+          }, "json");
         });
-
-        form.on('select(today)', function(data){
-            reloadTable();
-        });
-
-
-        //头工具栏事件
-        table.on('toolbar(test)', function(obj){
-            var checkStatus = table.checkStatus(obj.config.id);
-            switch(obj.event){
-                case 'delGq':
-                    layer.confirm('确定要删除所有过期订单吗？', function(index){
-                        layer.msg('操作中', {
-                            icon: 16
-                            ,shade: 0.01
-                        });
-
-                        $.post("/admin/index/delGqOrder",function (data) {
-                            if (data.code==1){
-                                layer.msg("操作成功！");
-                                reloadTable();
-                            }else{
-                                layer.msg(data.msg);
-                            }
-
-                        });
-
-                    });
-
-                    break;
-                case 'delLast':
-                    layer.confirm('确定要删除七天前的所有订单吗？', function(index){
-                        layer.msg('操作中', {
-                            icon: 16
-                            ,shade: 0.01
-                        });
-
-                        $.post("/admin/index/delLastOrder",function (data) {
-                            if (data.code==1){
-                                layer.msg("操作成功！");
-                                reloadTable();
-                            }else{
-                                layer.msg(data.msg);
-                            }
-
-                        });
-
-                    });
-                    break;
-            };
-        });
-
-
-        form.render();
-
+        return;
+      }
     });
 
+    $("#btnDelGq").on("click", function () {
+      confirmModal("删除过期订单", "确定要删除所有已过期订单吗？", "删除", function () {
+        $.post("/admin/index/delGqOrder", function (data) {
+          if (data.code == 1) { alertModal("删除成功", '<p style="margin:0;">已删除所有过期订单</p>'); loadOrders(); }
+          else { alertModal("删除失败", '<p style="margin:0;">' + esc(data.msg || "未知错误") + '</p>'); }
+        }, "json");
+      });
+    });
 
+    $("#btnDelLast").on("click", function () {
+      confirmModal("删除旧订单", "确定要删除七天前的所有订单吗？", "删除", function () {
+        $.post("/admin/index/delLastOrder", function (data) {
+          if (data.code == 1) { alertModal("删除成功", '<p style="margin:0;">已删除七天前订单</p>'); loadOrders(); }
+          else { alertModal("删除失败", '<p style="margin:0;">' + esc(data.msg || "未知错误") + '</p>'); }
+        }, "json");
+      });
+    });
+  });
 </script>
