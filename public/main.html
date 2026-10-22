@@ -91,11 +91,23 @@
       <div class="value" id="todayMoney">0.00<small>元</small></div>
       <div class="hint">今日成功订单金额</div>
     </div>
+    <div class="vmq-kpi" onclick="openOrders({today:'1', io:'2'})">
+      <span class="dot orange"></span>
+      <div class="row1"><span class="label">今日支出</span><span class="go">›</span></div>
+      <div class="value" id="todayOut">0.00<small>元</small></div>
+      <div class="hint">今日支出订单金额</div>
+    </div>
     <div class="vmq-kpi" onclick="openOrders({state:'1'})">
       <span class="dot blue"></span>
       <div class="row1"><span class="label">总收入</span><span class="go">›</span></div>
       <div class="value" id="countMoney">0<small>元</small></div>
       <div class="hint">历史成功订单金额</div>
+    </div>
+    <div class="vmq-kpi" onclick="openOrders({io:'2'})">
+      <span class="dot red"></span>
+      <div class="row1"><span class="label">总支出</span><span class="go">›</span></div>
+      <div class="value" id="countOut">0<small>元</small></div>
+      <div class="hint">历史支出订单金额</div>
     </div>
     <div class="vmq-kpi" onclick="openOrders({state:'1'})">
       <span class="dot gray"></span>
@@ -135,7 +147,9 @@
     $("#todaySuccessOrder").text(data.data.todaySuccessOrder);
     $("#todayCloseOrder").text(data.data.todayCloseOrder);
     $("#todayMoney").html(parseFloat(data.data.todayMoney || 0).toFixed(2) + "<small>元</small>");
+    $("#todayOut").html(parseFloat(data.data.todayOut || 0).toFixed(2) + "<small>元</small>");
     $("#countMoney").html(parseFloat(data.data.countMoney || 0).toFixed(2) + "<small>元</small>");
+    $("#countOut").html(parseFloat(data.data.countOut || 0).toFixed(2) + "<small>元</small>");
     $("#countOrder").text(data.data.countOrder);
 
     $("#PHP_VERSION").text(data.data.PHP_VERSION);

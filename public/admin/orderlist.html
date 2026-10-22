@@ -243,7 +243,6 @@
         + '<td>' + stateBadge(d.state) + '</td>'
         + '<td><div class="vmq-row-actions">'
         + (d.io == "2" ? '' : '<button class="vmq-link" data-act="bd" data-id="' + d.id + '">补单</button>')
-        + '<button class="vmq-link" data-act="info" data-id="' + d.id + '">详情</button>'
         + '<button class="vmq-link danger" data-act="del" data-id="' + d.id + '">删除</button>'
         + '</div></td>'
         + '</tr>';
@@ -280,6 +279,7 @@
     window.__orderFilter = null;
     $("#state").val(f.state || "");
     $("#type").val(f.type || "");
+    $("#io").val(f.io || "");
     $("#today").val(f.today || "");
   })();
 
@@ -294,32 +294,6 @@
     $("#orderBody").on("click", ".vmq-link", function () {
       var id = $(this).attr("data-id");
       var act = $(this).attr("data-act");
-
-      if (act === "info") {
-        $.get("/admin/index/getOrders", { page: 1, limit: 1000, state: "", type: "" }, function (res) {
-          if (res.code == 0) {
-            for (var i = 0; i < res.data.length; i++) {
-              var d = res.data[i];
-              if (String(d.id) === String(id)) {
-                var body =
-                  '<div class="kv"><b>创建时间</b><span>' + fmtDate(d.create_date) + '</span></div>'
-                  + '<div class="kv"><b>支付时间</b><span>' + fmtDate(d.pay_date) + '</span></div>'
-                  + '<div class="kv"><b>关闭时间</b><span>' + fmtDate(d.close_date) + '</span></div>'
-                  + '<div class="kv"><b>商户编号</b><span>' + esc(d.pay_id) + '</span></div>'
-                  + '<div class="kv"><b>云端编号</b><span>' + esc(d.order_id) + '</span></div>'
-                  + '<div class="kv"><b>收支</b><span>' + (d.io == "2" ? "支出" : "收入") + '</span></div>'
-                  + '<div class="kv"><b>自定义参数</b><span>' + esc(d.param) + '</span></div>'
-                  + '<div class="kv"><b>通知地址</b><span>' + esc(d.notify_url) + '</span></div>'
-                  + '<div class="kv"><b>返回地址</b><span>' + esc(d.return_url) + '</span></div>';
-                modal(true, "订单详情", body, [{ text: "关闭", cls: "vmq-btn", onClick: function () { modal(false); } }]);
-                return;
-              }
-            }
-            alertModal("订单详情", '<p style="margin:0;">未找到该订单</p>');
-          }
-        });
-        return;
-      }
 
       if (act === "bd") {
         confirmModal("补单确认", "将该订单标记为已支付，并向你的服务器发送完成通知？", "补单", function () {

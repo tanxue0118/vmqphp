@@ -66,6 +66,15 @@ class Index
             ->where("state >=1")
             ->sum("price");
 
+        $todayOut = Db::name("pay_order")
+            ->where("io",2)
+            ->where("create_date >=".$today)
+            ->where("create_date <=".($today+86400))
+            ->sum("price");
+        $countOut = Db::name("pay_order")
+            ->where("io",2)
+            ->sum("price");
+
         $v = Db::query("SELECT VERSION();");
         $v=$v[0]['VERSION()'];
 
@@ -81,8 +90,10 @@ class Index
             "todaySuccessOrder"=>$todaySuccessOrder,
             "todayCloseOrder"=>$todayCloseOrder,
             "todayMoney"=>round($todayMoney,2),
+            "todayOut"=>round($todayOut,2),
             "countOrder"=>$countOrder,
             "countMoney"=>round($countMoney),
+            "countOut"=>round($countOut,2),
 
             "PHP_VERSION"=>PHP_VERSION,
             "PHP_OS"=>PHP_OS,
